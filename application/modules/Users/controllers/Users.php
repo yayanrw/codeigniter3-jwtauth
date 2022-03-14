@@ -10,6 +10,7 @@ class Users extends REST_Controller
     public function __construct()
     {
         parent::__construct();
+        $this->load->model('UsersModel');
     }
 
     public function index_get()
@@ -21,7 +22,7 @@ class Users extends REST_Controller
 
                 // return response if token is valid
                 if ($decodedToken != false) {
-                    $data = $this->db->get('m_users')->result();
+                    $data = $this->UsersModel->GetAll();
                     $this->set_response(array(
                         'status' => true,
                         'message' => 'Success',
