@@ -33,10 +33,10 @@ class AuthController extends REST_Controller
                 ], REST_Controller::HTTP_NOT_FOUND);
             }
         } catch (\Throwable $th) {
-            echo json_encode([
-                'status' => false,
+            $this->set_response([
+                'status' => FALSE,
                 'message' => $th->getMessage()
-            ]);
+            ], REST_Controller::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -57,10 +57,10 @@ class AuthController extends REST_Controller
 
             $this->set_response("Unauthorized", REST_Controller::HTTP_UNAUTHORIZED);
         } catch (\Throwable $th) {
-            echo json_encode([
-                'status' => false,
+            $this->set_response([
+                'status' => FALSE,
                 'message' => $th->getMessage()
-            ]);
+            ], REST_Controller::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }
