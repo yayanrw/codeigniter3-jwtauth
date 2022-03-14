@@ -13,6 +13,7 @@ class AuthController extends REST_Controller
         $this->load->model('AuthModel');
     }
 
+    // Get Token 
     public function index_post()
     {
         try {
@@ -39,6 +40,7 @@ class AuthController extends REST_Controller
         }
     }
 
+    // Authorized Access
     public function index_get()
     {
         try {
