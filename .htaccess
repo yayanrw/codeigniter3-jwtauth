@@ -1,3 +1,4 @@
+SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
 RewriteEngine On
 RewriteCond %{REQUEST_URI} ^/system.*
 RewriteRule ^(.*)$ index.php?/$1 [L]
