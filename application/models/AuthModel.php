@@ -21,7 +21,7 @@ class AuthModel extends CI_Model
                 'username' => $user->username,
                 'email' => $user->email,
                 'name' => $user->name,
-                'iat' => date('Y-m-d H:i:s'),
+                'timestamp' => now(),
                 'exp' => date('Y-m-d H:i:s', strtotime('+1 day'))
             ];
             return AUTHORIZATION::generateToken($tokenData);
