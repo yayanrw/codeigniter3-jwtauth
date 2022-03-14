@@ -11,28 +11,20 @@ class Users extends REST_Controller
     {
         parent::__construct();
         $this->load->model('UsersModel');
+        $this->load->library('Helper');
     }
 
     public function index_get()
     {
         try {
-            $headers = $this->input->request_headers();
-            if (array_key_exists('Authorization', $headers) && !empty($headers['Authorization'])) {
-                $decodedToken = AUTHORIZATION::validateTimestamp($headers['Authorization']);
-
-                // return response if token is valid
-                if ($decodedToken != false) {
-                    $data = $this->UsersModel->GetAll();
-                    $this->set_response(array(
-                        'status' => true,
-                        'message' => 'Success',
-                        'data' => $data
-                    ), REST_Controller::HTTP_OK);
-                    return;
-                }
-            }
-
-            $this->set_response("Unauthorized", REST_Controller::HTTP_UNAUTHORIZED);
+            $this->helper->Authorize();
+            $data = $this->UsersModel->GetAll();
+            $this->set_response(array(
+                'status' => true,
+                'message' => 'Success',
+                'data' => $data
+            ), REST_Controller::HTTP_OK);
+            return;
         } catch (\Throwable $th) {
             $this->set_response([
                 'status' => FALSE,
