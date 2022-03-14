@@ -16,10 +16,7 @@ class AuthController extends CI_Controller
             $result = $this->AuthModel->Auth($data);
 
             if ($result) {
-                $jwtConfig = new JwtConfig();
-                $jwt = new Jwt();
-
-                $data = [
+                $tokenData = [
                     'id' => $result->id,
                     'username' => $result->username,
                     'email' => $result->email,
@@ -27,8 +24,7 @@ class AuthController extends CI_Controller
                     'iat' => date('Y-m-d H:i:s'),
                     'exp' => date('Y-m-d H:i:s', strtotime('+1 day'))
                 ];
-
-                $token = $jwt->encode($data, $jwtConfig->getSecretKey(), $jwtConfig->getAlgorithm());
+                $token = AUTHORIZATION::generateToken($tokenData);
 
                 echo json_encode(array(
                     'status' => true,
@@ -47,33 +43,6 @@ class AuthController extends CI_Controller
                 'message' => $th->getMessage()
             ]);
         }
-    }
-
-    public function Token()
-    {
-        $jwt = new JWT();
-
-        $jwtSecretKey = 'my_secret_key';
-        $data = array(
-            'userId' => 145,
-            'email' => 'yayanrw@gmail.com',
-            'userType' => 'admin'
-        );
-
-        $token = $jwt->encode($data, $jwtSecretKey, 'HS256');
-        echo $token;
-    }
-
-    public function DecodeToken()
-    {
-        $token = $this->uri->segment(3);
-
-        $jwt = new JWT();
-        $jwtSecretKey = 'my_secret_key';
-        $decoded_token = $jwt->decode($token, $jwtSecretKey, 'HS256');
-
-        $token = $jwt->jsonEncode($decoded_token);
-        echo $token;
     }
 }
 
