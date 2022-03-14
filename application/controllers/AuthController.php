@@ -1,7 +1,11 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class AuthController extends CI_Controller
+require APPPATH . '/libraries/REST_Controller.php';
+
+use Restserver\Libraries\REST_Controller;
+
+class AuthController extends REST_Controller
 {
     public function __construct()
     {
@@ -9,33 +13,23 @@ class AuthController extends CI_Controller
         $this->load->model('AuthModel');
     }
 
-    public function Auth()
+    public function index_post()
     {
         try {
             $data = $this->input->post();
             $result = $this->AuthModel->Auth($data);
 
             if ($result) {
-                $tokenData = [
-                    'id' => $result->id,
-                    'username' => $result->username,
-                    'email' => $result->email,
-                    'name' => $result->name,
-                    'iat' => date('Y-m-d H:i:s'),
-                    'exp' => date('Y-m-d H:i:s', strtotime('+1 day'))
-                ];
-                $token = AUTHORIZATION::generateToken($tokenData);
-
-                echo json_encode(array(
+                $this->set_response(array(
                     'status' => true,
                     'message' => 'Login success',
-                    'token' => $token
-                ));
+                    'token' => $result
+                ), REST_Controller::HTTP_OK);
             } else {
-                echo json_encode([
-                    'status' => false,
+                $this->set_response([
+                    'status' => FALSE,
                     'message' => 'Username or password is incorrect'
-                ]);
+                ], REST_Controller::HTTP_NOT_FOUND);
             }
         } catch (\Throwable $th) {
             echo json_encode([
