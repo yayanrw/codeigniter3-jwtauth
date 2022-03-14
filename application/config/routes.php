@@ -51,5 +51,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
 */
 $route['default_controller'] = 'Welcome';
 $route['auth']['post'] = 'AuthController/index_post';
+$route['auth']['get'] = 'AuthController/index_get';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
