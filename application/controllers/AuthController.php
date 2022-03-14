@@ -3,12 +3,53 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class AuthController extends CI_Controller
 {
-    public function index()
+    public function __construct()
     {
-        echo 'AuthController';
+        parent::__construct();
+        $this->load->model('AuthModel');
     }
 
-    public function token()
+    public function Auth()
+    {
+        try {
+            $data = $this->input->post();
+            $result = $this->AuthModel->Auth($data);
+
+            if ($result) {
+                $jwtConfig = new JwtConfig();
+                $jwt = new Jwt();
+
+                $data = [
+                    'id' => $result->id,
+                    'username' => $result->username,
+                    'email' => $result->email,
+                    'name' => $result->name,
+                    'iat' => date('Y-m-d H:i:s'),
+                    'exp' => date('Y-m-d H:i:s', strtotime('+1 day'))
+                ];
+
+                $token = $jwt->encode($data, $jwtConfig->getSecretKey(), $jwtConfig->getAlgorithm());
+
+                echo json_encode(array(
+                    'status' => true,
+                    'message' => 'Login success',
+                    'token' => $token
+                ));
+            } else {
+                echo json_encode([
+                    'status' => false,
+                    'message' => 'Username or password is incorrect'
+                ]);
+            }
+        } catch (\Throwable $th) {
+            echo json_encode([
+                'status' => false,
+                'message' => $th->getMessage()
+            ]);
+        }
+    }
+
+    public function Token()
     {
         $jwt = new JWT();
 
@@ -23,7 +64,7 @@ class AuthController extends CI_Controller
         echo $token;
     }
 
-    public function decode_token()
+    public function DecodeToken()
     {
         $token = $this->uri->segment(3);
 
