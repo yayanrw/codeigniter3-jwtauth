@@ -13,9 +13,15 @@ class Helper extends CI_Model
                 $this->output
                     ->set_content_type('application/json')
                     ->set_status_header(401);
-                echo "Unauthorized";
+                echo "Token Expired";
                 exit;
             }
+        } else {
+            $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(401);
+            echo "Unauthorized";
+            exit;
         }
     }
 }
