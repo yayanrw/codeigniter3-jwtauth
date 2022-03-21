@@ -7,7 +7,8 @@ class Helper
     {
         $headers = apache_request_headers();
         if (array_key_exists('Authorization', $headers) && !empty($headers['Authorization'])) {
-            $decodedToken = AUTHORIZATION::validateTimestamp($headers['Authorization']);
+            $token = explode(' ', $headers['Authorization']);
+            $decodedToken = AUTHORIZATION::validateTimestamp($token[1]);
 
             if ($decodedToken == false) {
                 header("Content-type: application/json; charset=utf-8");
