@@ -25,7 +25,15 @@ class AuthModel extends CI_Model
                 'time_expiration' => $user->time_expiration,
                 'exp' => date('Y-m-d H:i:s', strtotime('+' . $user->time_expiration . ' minutes'))
             ];
-            return AUTHORIZATION::generateToken($tokenData);
+
+            $data = array(
+                'username' => $user->username,
+                'email' => $user->email,
+                'name' => $user->name,
+                'exp' => date('Y-m-d H:i:s', strtotime('+' . $user->time_expiration . ' minutes')),
+                'token' => AUTHORIZATION::generateToken($tokenData)
+            );
+            return $data;
         } else {
             return false;
         }

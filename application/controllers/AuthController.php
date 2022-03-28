@@ -25,7 +25,7 @@ class AuthController extends REST_Controller
                 $this->set_response(array(
                     'status' => true,
                     'message' => 'Login success',
-                    'token' => $result
+                    'data' => $result
                 ), REST_Controller::HTTP_OK);
             } else {
                 $this->set_response([
