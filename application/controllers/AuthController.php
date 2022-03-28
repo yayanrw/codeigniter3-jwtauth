@@ -11,6 +11,7 @@ class AuthController extends REST_Controller
     {
         parent::__construct();
         $this->load->model('AuthModel');
+        $this->load->library('Helper');
     }
 
     // Get Token 
@@ -44,18 +45,9 @@ class AuthController extends REST_Controller
     public function index_get()
     {
         try {
-            $headers = $this->input->request_headers();
-            if (array_key_exists('Authorization', $headers) && !empty($headers['Authorization'])) {
-                $decodedToken = AUTHORIZATION::validateTimestamp($headers['Authorization']);
-
-                // return response if token is valid
-                if ($decodedToken != false) {
-                    $this->set_response($decodedToken, REST_Controller::HTTP_OK);
-                    return;
-                }
-            }
-
-            $this->set_response("Unauthorized", REST_Controller::HTTP_UNAUTHORIZED);
+            $decodedToken = $this->helper->Authorize();
+            $this->set_response($decodedToken, REST_Controller::HTTP_OK);
+            return;
         } catch (\Throwable $th) {
             $this->set_response([
                 'status' => FALSE,
