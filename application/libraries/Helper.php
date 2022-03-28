@@ -31,4 +31,17 @@ class Helper
             exit;
         }
     }
+
+    public function NullSafety($data, $null_desc = null)
+    {
+        if (isset($data)) {
+            return $data;
+        } else {
+            if (isset($null_desc)) {
+                return $null_desc;
+            } else {
+                return "N/A";
+            }
+        }
+    }
 }

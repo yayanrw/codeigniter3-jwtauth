@@ -32,4 +32,23 @@ class Users extends REST_Controller
             ], REST_Controller::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+
+    public function index_post()
+    {
+        try {
+            $decodedToken = $this->helper->Authorize();
+            $data = $this->input->post();
+            $user = $this->UsersModel->Insert($data, $decodedToken);
+            $this->set_response(array(
+                'status' => true,
+                'message' => 'Inserted Successfully',
+                'data' => $user
+            ), REST_Controller::HTTP_OK);
+        } catch (\Throwable $th) {
+            $this->set_response([
+                'status' => FALSE,
+                'message' => $th->getMessage()
+            ], REST_Controller::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
 }
