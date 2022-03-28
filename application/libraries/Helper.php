@@ -18,6 +18,8 @@ class Helper
                     'message' => 'Token is invalid'
                 ));
                 exit;
+            } else {
+                return $decodedToken;
             }
         } else {
             header("Content-type: application/json; charset=utf-8");
