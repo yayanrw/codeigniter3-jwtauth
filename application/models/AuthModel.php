@@ -6,7 +6,7 @@ class AuthModel extends CI_Model
 
     public function Auth($data)
     {
-        $user = $this->db->select('id, username, email, name')
+        $user = $this->db->select('id, username, email, name, time_expiration')
             ->from('m_users')
             ->where('password', hash('sha256', md5($data['password'])))
             ->group_start()
@@ -22,7 +22,8 @@ class AuthModel extends CI_Model
                 'email' => $user->email,
                 'name' => $user->name,
                 'timestamp' => now(),
-                'exp' => date('Y-m-d H:i:s', strtotime('+1 day'))
+                'time_expiration' => $user->time_expiration,
+                'exp' => date('Y-m-d H:i:s', strtotime('+' . $user->time_expiration . ' minutes'))
             ];
             return AUTHORIZATION::generateToken($tokenData);
         } else {
