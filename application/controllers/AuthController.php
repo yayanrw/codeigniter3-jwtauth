@@ -30,13 +30,15 @@ class AuthController extends REST_Controller
             } else {
                 $this->set_response([
                     'status' => FALSE,
-                    'message' => 'Username or password is incorrect'
+                    'message' => 'Username or password is incorrect',
+                    'data' => null
                 ], REST_Controller::HTTP_UNAUTHORIZED);
             }
         } catch (\Throwable $th) {
             $this->set_response([
                 'status' => FALSE,
-                'message' => $th->getMessage()
+                'message' => $th->getMessage(),
+                'data' => null
             ], REST_Controller::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
